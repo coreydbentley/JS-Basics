@@ -9,11 +9,11 @@ var outer = function(){
 //Above you're given a function that returns another function which has a closure over the name variable.
 //Invoke outer saving the return value into another variable called 'inner'.
 
-  //Code Here
+  var inner = outer();
 
 //Once you do that, invoke inner.
 
-  //Code Here
+  inner();
 
 
 
@@ -32,7 +32,9 @@ var callFriend = function(){
 //Above you're given a callFriend function that returns another function.
 //Do what you need to do in order to call your function and get 'Calling Jake at 435-215-9248' in your console.
 
-  //Code Here
+  var callFriendReturn = callFriend();
+  callFriendReturn('435-215-9248');
+
 
 
 
@@ -44,7 +46,13 @@ var callFriend = function(){
   Write a function called makeCounter that makes the following code work properly.
 */
 
-  //Code Here
+  function makeCounter() {
+    var value = 0;
+    return function incrementValue() {
+      value++;
+      return value;
+    }
+  }
   var count = makeCounter();
   count() // 1
   count() // 2
@@ -62,7 +70,18 @@ var callFriend = function(){
   (which invokes the original function that was passed in) that can only ever be executed once.
 */
 
-  //Code Here
+ function functionOne(functionParameter) {
+    var value = 0;
+    return function incrementValue() {
+      if(value === 0){
+        return functionParameter();
+      }
+      value++;
+    }
+  }
+  var newFunction = functionOne( function() { return 'hi'  });
+
+
 
 
 
@@ -71,8 +90,25 @@ var callFriend = function(){
 
 
 /*
-  Now, similar to the last problem, write a function called 'fnCounter' that accepts two parameters. The first parameter will be an anonymous function and the second parameter, 'N', will be a number. Now, in 'fnCounter', allow the anonymous funciton to be invoked 'N' number of times. After it's been invoked 'N' number of times, return 'STOP'.
+  Now, similar to the last problem, write a function called 'fnCounter' that accepts two parameters. 
+  The first parameter will be an anonymous function and the second parameter, 'N', will be a number. 
+  Now, in 'fnCounter', allow the anonymous funciton to be invoked 'N' number of times.
+ After it's been invoked 'N' number of times, return 'STOP'.
 */
+
+function fnCounter(functionParameter, N) {
+    var value = 0;
+    return function incrementValue() {
+      value++;
+      if(value <= N){
+        return functionParameter();
+      } else {
+        return'STOP';
+      }
+    }
+  }
+
+var newFunction = fnCounter( function() { return 'hi' }, 2);
 
 
 
@@ -87,11 +123,13 @@ var callFriend = function(){
           console.log( i );
       }, i*1000 );
     }
-  };
+  }
 
-  Above you have a function named counter. Examine the function (without running the code) then below write what you expect to happen when the funciton is invoked. *Hint: setTimeout calls a function or evaluates an expression after a specified number of milliseconds.
+  Above you have a function named counter. Examine the function (without running the code) 
+  then below write what you expect to happen when the funciton is invoked. 
+  *Hint: setTimeout calls a function or evaluates an expression after a specified number of milliseconds.
 
-    //Answer Here
+
 
 
   Now, run the function in your console and note what happpens.
@@ -104,7 +142,17 @@ var callFriend = function(){
   Fix the counter function so that it works the way you expect it to work. (logging 1 then 2 then 3, etc)
 */
 
-    //Code Here
+  var counter = function(){
+    for (var i=1; i<=5; i++) {
+      
+      function inner(e){
+        setTimeout( function timer(){ console.log( e );}, e*1000 );
+      }  
+      inner(i); 
+    }
+  }
+
+counter();
 
 
 
@@ -125,4 +173,16 @@ var callFriend = function(){
   *Hint: Don't let this fool you. Break down what's really happening here.
 */
 
+function buildArray() {
+  var theArray = [];
+  for(i=0; i <=5; i++){
+    console.log("Inside: " + theArray[i]);
+   function inner(e) {
+      theArray[e] = function() {console.log(e)};
+   }
+  inner(i);
+  }
+ return theArray;
+}
 
+var funcArray = buildArray();
